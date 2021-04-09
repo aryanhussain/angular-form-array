@@ -9,21 +9,21 @@ import { FormGroup, FormArray, FormBuilder, Validators } from "@angular/forms";
 export class AppComponent {
   productForm: FormGroup;
   productSKUs = [
-    { name: "foo1", value: "11" },
-    { name: "bar1", value: "21" },
-    { name: "car1", value: "31" },
-    { name: "foo2", value: "12" },
-    { name: "bar2", value: "22" },
-    { name: "car2", value: "32" },
-    { name: "foo3", value: "13" },
-    { name: "bar3", value: "23" },
-    { name: "car3", value: "33" },
-    { name: "foo4", value: "14" },
-    { name: "bar4", value: "24" },
-    { name: "car4", value: "34" },
-    { name: "foo5", value: "15" },
-    { name: "bar5", value: "25" },
-    { name: "car5", value: "35" }
+    { name: "foo1", value: "11", disbaled: false },
+    { name: "bar1", value: "21", disbaled: false },
+    { name: "car1", value: "31", disbaled: false },
+    { name: "foo2", value: "12", disbaled: false },
+    { name: "bar2", value: "22", disbaled: false },
+    { name: "car2", value: "32", disbaled: false },
+    { name: "foo3", value: "13", disbaled: false },
+    { name: "bar3", value: "23", disbaled: false },
+    { name: "car3", value: "33", disbaled: false },
+    { name: "foo4", value: "14", disbaled: false },
+    { name: "bar4", value: "24", disbaled: false },
+    { name: "car4", value: "34", disbaled: false },
+    { name: "foo5", value: "15", disbaled: false },
+    { name: "bar5", value: "25", disbaled: false },
+    { name: "car5", value: "35", disbaled: false }
   ];
   productCode: any = {}
   selectedSKU: any = [];
@@ -39,10 +39,13 @@ export class AppComponent {
   }
 
   getproductCodeData(i) {
-    this.productCode[i] = this.productSKUs.filter(element => {
-      if (!this.selectedSKU.includes(element.value)) {
-        return element;
+    this.productCode[i] = this.productSKUs.map(element => {
+      if (this.selectedSKU.includes(element.value)) {
+        element.disbaled = true
+      } else {
+        element.disbaled = false
       }
+      return element
     });
   }
 
@@ -65,9 +68,14 @@ export class AppComponent {
     });
     this.quantities().push(this.newQuantity());
   }
-  removeQuantity(i: number) {
+  removeQuantity(i: number, code: string) {
     if (i > -1) {
       this.productForm.value.quantities.splice(i, 1);
+      let _index = this.productSKUs.findIndex(i => {
+        return i.value == code
+      })
+      if(_index >-1)
+        this.productSKUs[_index].disbaled = false;
       this.quantities().removeAt(i);
     }
   }
@@ -79,10 +87,12 @@ export class AppComponent {
 
   resetForm() {
     this.productForm.reset();
+    this.productSKUs.forEach(element => {
+      element.disbaled = false;
+    });
     const control = <FormArray>this.productForm.controls['quantities'];
     for (let i = control.length - 1; i > 0; i--) {
       control.removeAt(i)
     }
-    this.newQuantity();
   }
 }

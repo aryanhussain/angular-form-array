@@ -1,58 +1,59 @@
 <div class="container">
 
-  <mat-card class="example-card">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Angular FormArray Example</mat-card-title>
-    </mat-card-header>
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <p>
-        <mat-form-field class="example-form-field">
-          <mat-label>Product Name</mat-label>
-          <input matInput type="text" formControlName="productName">
-          <mat-hint>Mandatory Field</mat-hint>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field class="example-form-field">
-          <mat-label>Product Description</mat-label>
-          <textarea matInput type="text" formControlName="productDescription"></textarea>
-          <mat-hint>Mandatory Field</mat-hint>
-        </mat-form-field>
-      </p>
-      <table class="example-full-width" cellspacing="0" formArrayName="quantities">
-        <tr *ngFor="let quantity of quantities().controls; let i=index" [formGroupName]="i">
-          <td>
-            <mat-form-field appearance="fill">
-              <mat-label>Product Code</mat-label>
-              <mat-select formControlName="code">
-                <mat-option *ngFor="let obj of productCode[i]" [value]="obj.value">{{obj.name}}</mat-option>
-              </mat-select>
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title>Angular FormArray Example</mat-card-title>
+        </mat-card-header>
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <hr>
+            <h5>Product Basic Details</h5>
+            <p>
+                <mat-form-field class="example-form-field">
+                    <mat-label>Product Name</mat-label>
+                    <input matInput type="text" formControlName="productName">
+                    <mat-hint>Mandatory Field</mat-hint>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field class="example-form-field">
+                    <mat-label>Product Description</mat-label>
+                    <textarea matInput type="text" formControlName="productDescription"></textarea>
+                    <mat-hint>Mandatory Field</mat-hint>
+                </mat-form-field>
+            </p>
+            <hr>
+            <h5>Product Variants</h5>
+            <table class="example-full-width" cellspacing="0" formArrayName="quantities">
+                <tr *ngFor="let quantity of quantities().controls; let i=index" [formGroupName]="i">
+                    <td>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Product Code</mat-label>
+                            <mat-select formControlName="code">
+                                <mat-option *ngFor="let obj of productCode[i]" [disabled]="obj.disbaled" [value]="obj.value">{{obj.name}}</mat-option>
+                            </mat-select>
 
-            </mat-form-field>
-          </td>
-          <td>
-            <mat-form-field class="example-form-field">
-              <mat-label>Price</mat-label>
-              <input matInput type="number" formControlName="price">
-              <mat-hint>Price should be between 1-500</mat-hint>
-            </mat-form-field>
-          </td>
-          <td *ngIf="quantities().controls.length == i + 1">
-            <button [disabled]="!productForm.value.quantities[i].code || !productForm.value.quantities[i].price"
-              mat-button (click)="addQuantity()" class="btn btn-danger">Add</button>
-          </td>
-          <td *ngIf="quantities().controls.length != i + 1">
-            <button *ngIf="productForm.value.quantities[i].code && productForm.value.quantities[i].price" mat-button
-              (click)="removeQuantity(i)" class="btn btn-danger">Remove</button>
-          </td>
-        </tr>
-      </table>
-      <button type="submit" [disabled]="productForm.invalid" mat-button class="btn btn-success">Submit</button>
-      <button type="button"  mat-button class="btn btn-success" (click)="resetForm()">Reset</button>
-    </form>
-    
-    <p *ngIf="Submitted">{{this.productForm.value | json}}</p>
-  </mat-card>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="example-form-field">
+                            <mat-label>Price</mat-label>
+                            <input matInput type="number" formControlName="price">
+                            <mat-hint>Price should be between 1-500</mat-hint>
+                        </mat-form-field>
+                    </td>
+                    <td *ngIf="quantities().controls.length == i + 1">
+                        <button [disabled]="!productForm.value.quantities[i].code || !productForm.value.quantities[i].price" mat-button (click)="addQuantity()" class="btn btn-danger">Add</button>
+                    </td>
+                    <td *ngIf="quantities().controls.length != i + 1">
+                        <button *ngIf="productForm.value.quantities[i].code && productForm.value.quantities[i].price" mat-button (click)="removeQuantity(i,productForm.value.quantities[i].code)" class="btn btn-danger">Remove</button>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" [disabled]="productForm.invalid" mat-button class="btn btn-success">Submit</button>
+            <button type="button" mat-button class="btn btn-success" (click)="resetForm()">Reset</button>
+        </form>
+
+        <p *ngIf="Submitted">{{this.productForm.value | json}}</p>
+    </mat-card>
 
 </div>
