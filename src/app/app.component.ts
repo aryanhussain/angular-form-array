@@ -1,10 +1,12 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from "@angular/core";
 import { FormGroup, FormArray, FormBuilder, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"]
+  styleUrls: ["./app.component.css"],
+  changeDetection:ChangeDetectionStrategy.Default,
+  encapsulation:ViewEncapsulation.None
 })
 export class AppComponent {
   productForm: FormGroup;
@@ -57,7 +59,7 @@ export class AppComponent {
     this.getproductCodeData(this.quantities().length)
     return this.fb.group({
       code: ['', [Validators.required]],
-      price: ['', [Validators.required, Validators.min(1), Validators.max(500)]],
+      price: ['', [Validators.required, Validators.min(1), Validators.max(50000)]],
     });
   }
 
